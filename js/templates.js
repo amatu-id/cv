@@ -1,0 +1,37 @@
+/* Template catalogue. group 'ats' = single column, no graphics, standard headings.
+   group 'design' = visual layouts for sending directly to a person. */
+'use strict';
+(function () {
+const ATS = ['profil','kerja','proyek','didik','skill','sertifikat','latih','bahasa','org','award','publik','ekstra','lain','pribadi','rujuk'];
+CV.PALETTE = [['#111827','Hitam'],['#1f3a5f','Biru tua'],['#2b6cb0','Biru'],['#1f5c4d','Hijau tua'],['#2f7d6b','Hijau laut'],['#7a2233','Marun'],['#a8492b','Terakota'],['#8a6d2f','Emas tua'],['#43386b','Ungu tua'],['#44505c','Abu batu']];
+CV.FONTS_ATS = [['Arimo','Arimo (setara Arial)','Arial'],['Carlito','Carlito (setara Calibri)','Calibri'],['Tinos','Tinos (setara Times New Roman)','Times New Roman']];
+CV.FONTS_DESIGN = [['Inter','Inter'],['Lato','Lato'],['Archivo','Archivo'],['IBM Plex Sans','IBM Plex Sans'],['Source Serif 4','Source Serif'],['EB Garamond','EB Garamond']];
+CV.FONT_WEIGHTS = {'Arimo':['400','400i','700','700i'],'Tinos':['400','400i','700','700i'],'Carlito':['400','400i','700','700i'],'Inter':['400','400i','600','700'],'Lato':['400','400i','700','900'],'Archivo':['400','400i','600','800'],'IBM Plex Sans':['400','400i','600','700'],'IBM Plex Mono':['400','500'],'Source Serif 4':['400','400i','600','700'],'EB Garamond':['400','400i','600'],'Playfair Display':['500','700']};
+
+CV.TEMPLATES = [
+  /* ---------- ATS ---------- */
+  {id:'ats-standar',group:'ats',name:'Standar',desc:'Arimo, nama rata kiri, judul bergaris. Aman untuk hampir semua portal lamaran.',fb:'Arimo',layout:'one',entry:'std',acc:'#111827',fs:10,order:ATS},
+  {id:'ats-klasik',group:'ats',name:'Klasik',desc:'Tinos, nama di tengah. Format baku korporat, BUMN, dan perbankan.',fb:'Tinos',layout:'one',entry:'std',acc:'#111827',fs:10.5,order:ATS},
+  {id:'ats-ringkas',group:'ats',name:'Ringkas',desc:'Carlito, jabatan dan perusahaan satu baris. Hemat tempat untuk CV satu halaman.',fb:'Carlito',layout:'one',entry:'inline',acc:'#111827',fs:10.5,mg:.85,order:ATS},
+  {id:'ats-eksekutif',group:'ats',name:'Eksekutif',desc:'Perusahaan ditulis lebih dulu dan keahlian di atas. Untuk manajer dan senior.',fb:'Tinos',layout:'one',entry:'orgfirst',acc:'#111827',fs:10.5,order:['profil','skill','kerja','proyek','didik','sertifikat','latih','bahasa','org','award','publik','ekstra','lain','pribadi','rujuk']},
+  {id:'ats-teknis',group:'ats',name:'Teknis',desc:'Keahlian dan proyek didahulukan. Untuk IT, teknik, dan peran berbasis alat.',fb:'Arimo',layout:'one',entry:'std',acc:'#111827',fs:9.5,order:['profil','skill','kerja','proyek','sertifikat','didik','latih','bahasa','org','award','publik','ekstra','lain','pribadi','rujuk']},
+  {id:'ats-fresh',group:'ats',name:'Lulusan Baru',desc:'Pendidikan dan organisasi didahulukan. Untuk lulusan baru dan magang.',fb:'Carlito',layout:'one',entry:'std',acc:'#111827',fs:11,order:['profil','didik','org','proyek','kerja','skill','latih','sertifikat','bahasa','award','publik','ekstra','lain','pribadi','rujuk']},
+  {id:'ats-akademik',group:'ats',name:'Akademik',desc:'Pendidikan, publikasi, dan penelitian di depan. Untuk dosen dan peneliti.',fb:'Tinos',layout:'one',entry:'std',acc:'#111827',fs:10.5,order:['profil','didik','publik','kerja','proyek','award','org','sertifikat','latih','skill','bahasa','ekstra','lain','pribadi','rujuk']},
+  {id:'ats-aksen',group:'ats',name:'Aksen Warna',desc:'Tetap satu kolom, nama dan judul berwarna. Terbaca ATS, lebih hidup saat dicetak.',fb:'Arimo',layout:'one',entry:'std',acc:'#1f3a5f',color:true,fs:10,order:ATS},
+
+  /* ---------- design ---------- */
+  {id:'kolom',group:'design',name:'Kolom Gelap',desc:'Kolom kiri berwarna berisi foto, kontak, dan keahlian.',fb:'Inter',layout:'side-l',headIn:'main',contact:'side',photoIn:'side',entry:'std',skill:'list',acc:'#1f3a5f',color:true,photo:true,fs:9.5,sideW:'31%',side:['kontak','skill','bahasa','pribadi','lain'],order:ATS},
+  {id:'sisi-terang',group:'design',name:'Sisi Terang',desc:'Kolom kanan berwarna muda, foto bulat di samping nama.',fb:'Lato',layout:'side-r',headIn:'main',contact:'side',photoIn:'head',entry:'std',skill:'list',acc:'#2f7d6b',color:true,photo:true,fs:10,sideW:'32%',side:['kontak','skill','bahasa','sertifikat','pribadi','lain'],order:ATS},
+  {id:'pita',group:'design',name:'Pita Atas',desc:'Pita warna penuh di atas, isi satu kolom yang mudah dipindai.',fb:'Archivo',layout:'one',headIn:'top',contact:'head',photoIn:'head',entry:'std',skill:'lines',acc:'#7a2233',color:true,photo:true,fs:10,order:ATS},
+  {id:'editorial',group:'design',name:'Editorial',desc:'Nama serif besar, tanggal di margin kiri. Untuk komunikasi dan media.',fb:'Source Serif 4',fh:'Playfair Display',layout:'one',headIn:'top',contact:'head',photoIn:'head',entry:'dateleft',skill:'lines',acc:'#111827',color:true,photo:false,fs:10,order:ATS},
+  {id:'garis-waktu',group:'design',name:'Garis Waktu',desc:'Riwayat kerja digambar sebagai garis waktu dengan titik.',fb:'IBM Plex Sans',layout:'side-l',headIn:'top',contact:'head',photoIn:'head',entry:'stackdate',skill:'list',dots:['kerja','didik','org'],acc:'#2b6cb0',color:true,photo:true,fs:9.5,sideW:'28%',side:['skill','bahasa','sertifikat','latih','pribadi','lain'],order:ATS},
+  {id:'swiss',group:'design',name:'Grid Swiss',desc:'Hitam putih, judul bagian di kolom kiri, tipografi tegas.',fb:'Archivo',layout:'one',headIn:'top',contact:'head',photoIn:'none',entry:'std',skill:'lines',acc:'#111827',photo:false,fs:9.5,order:ATS},
+  {id:'korporat',group:'design',name:'Korporat',desc:'Kepala gelap berfoto, kolom data abu-abu. Rapi untuk perkantoran.',fb:'Inter',layout:'side-r',headIn:'top',contact:'head',photoIn:'head',entry:'std',skill:'list',acc:'#1f3a5f',color:true,photo:true,fs:9.5,sideW:'29%',side:['skill','bahasa','sertifikat','pribadi','lain'],order:ATS},
+  {id:'monogram',group:'design',name:'Monogram',desc:'Inisial besar dan label keahlian. Untuk desain dan kreatif.',fb:'Lato',layout:'side-l',headIn:'main',contact:'side',photoIn:'none',mono:true,entry:'std',skill:'chips',lang:'dots',acc:'#a8492b',color:true,photo:false,fs:10,sideW:'30%',side:['kontak','skill','bahasa','pribadi','lain'],order:ATS},
+  {id:'elegan',group:'design',name:'Elegan',desc:'EB Garamond rata tengah dengan garis tipis. Untuk hukum dan konsultan.',fb:'EB Garamond',layout:'one',headIn:'top',contact:'head',photoIn:'none',entry:'orgfirst',skill:'lines',acc:'#8a6d2f',color:true,photo:false,fs:11,order:ATS},
+  {id:'insinyur',group:'design',name:'Insinyur',desc:'Label mono bernomor dan tabel kontak. Untuk teknik dan data.',fb:'IBM Plex Sans',fm:'IBM Plex Mono',layout:'side-r',headIn:'top',contact:'grid',photoIn:'none',numbered:true,entry:'std',skill:'list',acc:'#1f5c4d',color:true,photo:false,fs:9.5,sideW:'30%',side:['skill','bahasa','sertifikat','latih','pribadi','lain'],order:ATS},
+  {id:'minimal',group:'design',name:'Minimal',desc:'Banyak ruang kosong, foto kotak di kanan atas.',fb:'Inter',layout:'one',headIn:'top',contact:'head',photoIn:'head',entry:'dateleft',skill:'lines',acc:'#44505c',color:true,photo:true,fs:9.5,order:ATS},
+  {id:'dua-kolom',group:'design',name:'Dua Kolom',desc:'Dua kolom tanpa latar, cocok untuk isi yang padat.',fb:'Source Serif 4',layout:'side-r',headIn:'top',contact:'head',photoIn:'none',entry:'stackdate',skill:'list',acc:'#43386b',color:true,photo:false,fs:9.5,sideW:'36%',side:['skill','sertifikat','latih','bahasa','org','award','pribadi','lain'],order:ATS}
+];
+CV.tpl = id => CV.TEMPLATES.find(t => t.id === id) || CV.TEMPLATES[0];
+})();

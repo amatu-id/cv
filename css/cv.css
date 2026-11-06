@@ -1,0 +1,250 @@
+/* CV page. All sizes in em so font size and fit can scale the whole page. No pseudo-elements:
+   the PDF writer reads real elements only. */
+.cv{width:var(--W);height:var(--H);background:#fff;color:#1a1a1a;font-family:var(--fb),sans-serif;font-size:var(--fs);line-height:var(--lh);display:flex;flex-direction:column;overflow:hidden;position:relative;font-variant-ligatures:none;font-feature-settings:"liga" 0;font-synthesis:none;text-align:left;letter-spacing:0;overflow-wrap:break-word}
+.cv.measure{height:auto;overflow:visible}
+.cv a{color:inherit;text-decoration:none}
+.cv-top{flex:none;padding:var(--my) var(--mx) 0}
+.cv-cols{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr)}
+.cv-col{min-width:0;padding:var(--my) var(--mx)}
+.cv.has-top .cv-col{padding-top:calc(.9em*var(--sp))}
+.b{min-width:0}
+.cv-col>.b:first-child{margin-top:0}
+
+/* head */
+.hd{display:flex;gap:1.4em;align-items:flex-start;justify-content:space-between}
+.hd-t{flex:1;min-width:0}
+.nm{font-family:var(--fh),sans-serif;font-size:2.15em;font-weight:700;line-height:1.14}
+.jb{font-size:1.14em;margin-top:.15em}
+.ct{font-size:.95em;margin-top:.45em}
+.ph{display:block;object-fit:cover;width:6.6em;height:6.6em;flex:none}
+
+/* sections */
+.h{font-family:var(--fh),sans-serif;font-weight:700;font-size:1.05em;margin-top:calc(1.15em*var(--sp));margin-bottom:calc(.4em*var(--sp))}
+.pa{margin-top:calc(.1em*var(--sp))}
+.eh{margin-top:calc(.75em*var(--sp))}
+.h+.eh{margin-top:0}
+.eh.cp{margin-top:calc(.34em*var(--sp))}
+.r{display:flex;justify-content:space-between;align-items:baseline;gap:1.2em}
+.t,.t2{font-weight:700;min-width:0}
+.d,.l{flex:none;white-space:nowrap;text-align:right}
+.o{min-width:0}
+.m{font-size:.94em;font-style:italic}
+.li{display:flex;gap:.55em;margin-top:calc(.14em*var(--sp));padding-left:.2em}
+.mk{flex:none}
+.tx{min-width:0;flex:1}
+.ln{margin-top:calc(.16em*var(--sp))}
+.ln b{font-weight:700}
+.kv{margin-top:calc(.16em*var(--sp))}
+.kv .k{font-weight:700}
+.kv .k+.v{margin-left:.35em}
+.main-kv{display:block}
+.sg{margin-top:calc(.45em*var(--sp))}
+.sl{font-weight:700}
+.dot{display:none}
+.lds{display:flex;gap:.28em;margin-top:.22em}
+.ld{display:block;width:.62em;height:.62em;border-radius:50%;background:var(--t2)}
+.ld.on{background:var(--ac)}
+.lg{margin-top:calc(.42em*var(--sp))}
+.lg-s{opacity:1;font-size:.92em}
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.22em}
+.chip{display:block;padding:.1em .5em;border-radius:.3em;background:var(--t2);color:#1a1a1a;font-size:.92em}
+.dl{display:grid;grid-template-columns:9.9em minmax(0,1fr);column-gap:1em}
+.dl .d{text-align:left;white-space:normal;font-size:.94em}
+.li.ind{margin-left:10.9em}
+.st .d{text-align:left;white-space:normal;font-size:.94em}
+.sd .o{margin-top:.02em}
+
+/* side columns */
+.l-side-l .cv-cols{grid-template-columns:var(--sw) minmax(0,1fr)}
+.l-side-r .cv-cols{grid-template-columns:minmax(0,1fr) var(--sw)}
+.l-side-l .cv-side{order:-1}
+.cv-side{font-size:.96em}
+.cv-side .kv{margin-top:calc(.45em*var(--sp))}
+.cv-side .kv .k{display:block;font-weight:700;font-size:.92em}
+.cv-side .kv .k+.v{margin-left:0;display:block}
+.cv-side .eh{margin-top:calc(.5em*var(--sp))}
+.cv-side .h+.eh,.cv-side .h+.sg,.cv-side .h+.kv,.cv-side .h+.lg{margin-top:0}
+.cv-side .h:first-child{margin-top:0}
+.cv-side .ln{margin-top:calc(.35em*var(--sp))}
+.cv-main .kv .k{font-weight:400}
+.cv-main .kv .k+.v{font-weight:400}
+.cv-main .kv .k{color:inherit}
+
+/* ========== ATS: single column, flat text ========== */
+.t-ats-standar .h,.t-ats-teknis .h,.t-ats-aksen .h{text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid currentColor;padding-bottom:.1em}
+.t-ats-standar .nm{font-size:2em}
+.t-ats-klasik .hd,.t-ats-fresh .hd{text-align:center}
+.t-ats-klasik .nm{font-size:2em;letter-spacing:.01em}
+.t-ats-klasik .h{text-align:center;text-transform:uppercase;letter-spacing:.09em;border-bottom:1px solid #1a1a1a;padding-bottom:.12em}
+.t-ats-klasik .o{font-style:italic}
+.t-ats-ringkas .nm{font-size:1.9em}
+.t-ats-ringkas .jb{font-size:1.05em;margin-top:0}
+.t-ats-ringkas .ct{margin-top:.15em}
+.t-ats-ringkas .h{text-transform:uppercase;font-size:1em;letter-spacing:.02em;border-bottom:.75px solid #1a1a1a;margin-top:calc(.8em*var(--sp));margin-bottom:calc(.22em*var(--sp))}
+.t-ats-ringkas .il .o{font-weight:400}
+.t-ats-ringkas .eh{margin-top:calc(.42em*var(--sp))}
+.t-ats-ringkas .li{margin-top:calc(.04em*var(--sp))}
+.t-ats-eksekutif .nm{text-transform:uppercase;letter-spacing:.05em;font-size:1.85em}
+.t-ats-eksekutif .h{text-transform:uppercase;letter-spacing:.06em;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:.12em 0;margin-bottom:calc(.55em*var(--sp))}
+.t-ats-eksekutif .o{font-style:italic}
+.t-ats-teknis .nm{font-size:1.9em}
+.t-ats-teknis .h{letter-spacing:.05em;font-size:1em}
+.t-ats-fresh .h{font-size:1.1em;border-bottom:1.5px solid #1a1a1a}
+.t-ats-akademik .nm{font-size:1.75em}
+.t-ats-akademik .h{font-size:1.12em;border-bottom:.75px solid #1a1a1a}
+.t-ats-aksen .nm,.t-ats-aksen .h{color:var(--ac)}
+.t-ats-aksen .jb{color:var(--ac)}
+
+/* ========== Kolom Gelap ========== */
+.t-kolom .cv-side{background:var(--ac);color:var(--on)}
+.t-kolom .nm{color:var(--ac);font-size:2.3em;letter-spacing:-.015em}
+.t-kolom .jb{margin-bottom:.5em}
+.t-kolom .phb{margin-bottom:1.3em}
+.t-kolom .phb .ph{width:100%;height:auto;aspect-ratio:1/1;border-radius:.3em}
+.t-kolom .h{color:var(--ac);text-transform:uppercase;font-size:.92em;letter-spacing:.09em;border-bottom:1px solid var(--t3);padding-bottom:.25em}
+.t-kolom .cv-side .h{color:var(--on);border-bottom:1px solid var(--on2);margin-top:calc(1.4em*var(--sp))}
+.t-kolom .cv-side .h:first-child{margin-top:0}
+.t-kolom .cv-side .k,.t-kolom .cv-side .sl{color:var(--on)}
+.t-kolom .cv-side .sv,.t-kolom .cv-side .ln,.t-kolom .cv-side .v{color:var(--on2)}
+.t-kolom .cv-side .ln b{color:var(--on)}
+.t-kolom .d,.t-kolom .l{color:#5b6470;font-size:.94em}
+.t-kolom .cv-side .cv-col{padding:var(--my) 1.5em}
+.t-kolom .cv-side,.t-monogram .cv-side{padding-left:1.8em;padding-right:1.6em}
+.t-kolom .cv-main,.t-monogram .cv-main,.t-garis-waktu .cv-main{padding-left:2.2em}
+
+/* ========== Sisi Terang ========== */
+.t-sisi-terang .cv-side{background:var(--t1);padding-left:1.8em;padding-right:1.8em}
+.t-sisi-terang .cv-main{padding-right:2.2em}
+.t-sisi-terang .hd{flex-direction:row-reverse;justify-content:flex-end;align-items:center}
+.t-sisi-terang .ph{border-radius:50%;width:6.4em;height:6.4em}
+.t-sisi-terang .hb{margin-bottom:.4em}
+.t-sisi-terang .nm{font-size:2.15em;font-weight:900;color:var(--ac);line-height:1.08}
+.t-sisi-terang .h{color:var(--ac);font-weight:900;font-size:1.08em;border-bottom:2px solid var(--ac);padding-bottom:.15em}
+.t-sisi-terang .cv-side .h{font-size:1em}
+.t-sisi-terang .d,.t-sisi-terang .l{color:#55606a;font-size:.94em}
+
+/* ========== Pita Atas ========== */
+.t-pita .cv-top{background:var(--ac);color:var(--on);padding:calc(var(--my)*.72) var(--mx)}
+.t-pita .hd{align-items:center}
+.t-pita .nm{font-weight:800;font-size:2.5em;letter-spacing:-.015em}
+.t-pita .ct,.t-pita .jb{color:var(--on)}
+.t-pita .ph{border-radius:50%;width:6em;height:6em;border:2px solid var(--on)}
+.t-pita.has-top .cv-col{padding-top:calc(1.25em*var(--sp))}
+.t-pita .h{color:var(--ac);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:1em;border-bottom:1.5px solid var(--ac);padding-bottom:.14em}
+.t-pita .t{font-weight:600}
+.t-pita .d,.t-pita .l{color:#55606a}
+
+/* ========== Editorial ========== */
+.t-editorial .nm{font-weight:500;font-size:3.3em;letter-spacing:-.018em;line-height:1.04;color:var(--ac)}
+.t-editorial .jb{font-style:italic;font-size:1.2em;margin-top:.25em}
+.t-editorial .ct{border-top:1.5px solid var(--ac);border-bottom:.5px solid var(--ac);padding:.36em 0;margin-top:.8em}
+.t-editorial .h{font-size:1.28em;font-weight:500;margin-top:calc(1.2em*var(--sp));color:var(--ac)}
+.t-editorial .t{font-weight:600}
+.t-editorial .d{color:#555;font-style:italic}
+.t-editorial .ph{width:7.6em;height:9.2em}
+
+/* ========== Garis Waktu ========== */
+.t-garis-waktu .cv-top{background:var(--t1);padding:var(--my) var(--mx) calc(var(--my)*.7)}
+.t-garis-waktu .hd{align-items:center}
+.t-garis-waktu .ph{border-radius:50%}
+.t-garis-waktu .nm{color:var(--ac);font-size:2.4em}
+.t-garis-waktu .cv-side{border-right:.75px solid var(--t3);padding-right:1.4em}
+.t-garis-waktu.has-top .cv-side,.t-garis-waktu.has-top .cv-main{padding-top:calc(1.3em*var(--sp))}
+.t-garis-waktu .h{color:var(--ac);font-weight:700;font-size:1.02em;text-transform:uppercase;letter-spacing:.06em}
+.t-garis-waktu .d{color:#55606a;font-size:.94em}
+.t-garis-waktu .eh.tl,.t-garis-waktu .li.tl{border-left:1.5px solid var(--t3);margin-left:.34em;padding-left:1.15em;position:relative}
+.t-garis-waktu .eh.tl{margin-top:0;padding-top:calc(.62em*var(--sp))}
+.t-garis-waktu .h+.eh.tl{padding-top:0}
+.t-garis-waktu .li.tl{margin-top:0;padding-top:calc(.14em*var(--sp))}
+.t-garis-waktu .dot{display:block;position:absolute;left:-.42em;top:calc(.62em*var(--sp) + .3em);width:.72em;height:.72em;border-radius:50%;background:var(--ac)}
+.t-garis-waktu .h+.eh.tl .dot{top:.3em}
+.t-garis-waktu .cv-main .eh:not(.tl){margin-left:0}
+
+/* ========== Grid Swiss ========== */
+.t-swiss .nm{font-weight:800;font-size:3.6em;line-height:.98;letter-spacing:-.035em}
+.t-swiss .jb{font-size:1.25em;font-weight:600;margin-top:.35em}
+.t-swiss .ct{border-top:3px solid #111;padding-top:.5em;margin-top:.9em}
+.t-swiss.has-top .cv-col{padding-top:calc(.9em*var(--sp))}
+.t-swiss .cv-main{padding-left:calc(var(--mx) + 9.6em)}
+.t-swiss .h{position:relative;height:0;margin:0;overflow:visible;font-size:.9em;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.t-swiss .ht{position:absolute;left:-10.6em;top:calc(1.3em*var(--sp));width:9.6em;border-top:1px solid #111;padding-top:.3em;display:block}
+.t-swiss .h+.b{border-top:1px solid #111;padding-top:.3em}
+.t-swiss .h+.eh,.t-swiss .h+.pa,.t-swiss .h+.ln,.t-swiss .h+.kv{margin-top:calc(1.3em*var(--sp))}
+.t-swiss .cv-main>.h:first-child+.b{margin-top:0}
+.t-swiss .cv-main>.h:first-child .ht{top:0}
+.t-swiss .t{font-weight:600}
+.t-swiss .d{font-weight:400}
+
+/* ========== Korporat ========== */
+.t-korporat .cv-top{background:var(--ac);color:var(--on);padding:calc(var(--my)*.75) var(--mx)}
+.t-korporat .hd{flex-direction:row-reverse;justify-content:flex-end;align-items:center}
+.t-korporat .ph{border-radius:.25em;border:2px solid var(--on);width:6.4em;height:6.4em}
+.t-korporat .nm{font-size:2.2em;letter-spacing:-.01em}
+.t-korporat .cv-side{background:#f1f3f5}
+.t-korporat .cv-side{padding-left:1.5em;padding-right:1.5em}
+.t-korporat .cv-main{padding-right:2em}
+.t-korporat.has-top .cv-side,.t-korporat.has-top .cv-main{padding-top:calc(1.3em*var(--sp))}
+.t-korporat .h{color:var(--ac);text-transform:uppercase;letter-spacing:.06em;font-size:.95em;border-bottom:1px solid var(--t3);padding-bottom:.2em}
+.t-korporat .t{font-weight:600}
+.t-korporat .d,.t-korporat .l{color:#55606a;font-size:.94em}
+
+/* ========== Monogram ========== */
+.t-monogram .cv-side{background:var(--t1)}
+.t-monogram .mono{margin-bottom:1.6em}
+.t-monogram .mono span{display:flex;align-items:center;justify-content:center;width:3.05em;height:3.05em;font-size:1.9em;font-weight:900;letter-spacing:.02em;line-height:1;background:var(--ac);color:var(--on)}
+.t-monogram .nm{font-weight:900;font-size:2.6em;line-height:1.05;letter-spacing:-.015em}
+.t-monogram .jb{color:var(--ac);font-weight:700;margin-bottom:.4em}
+.t-monogram .h{color:var(--ac);font-weight:900;font-size:1.1em}
+.t-monogram .cv-side .h{margin-top:calc(1.25em*var(--sp))}
+.t-monogram .cv-side .h:first-child{margin-top:0}
+.t-monogram .d,.t-monogram .l{color:#55606a;font-size:.94em}
+.t-monogram .chip{background:#fff;border:.75px solid var(--t3)}
+.t-monogram .sl{margin-top:.2em}
+
+/* ========== Elegan ========== */
+.t-elegan .hd{text-align:center;display:block}
+.t-elegan .nm{font-weight:400;font-size:2.6em;letter-spacing:.02em}
+.t-elegan .jb{font-style:italic;color:var(--ac);font-size:1.18em}
+.t-elegan .ct{padding-bottom:.6em;border-bottom:.75px solid var(--ac)}
+.t-elegan .h{text-align:center;font-weight:600;font-size:.98em;text-transform:uppercase;letter-spacing:.17em;color:var(--ac);margin-top:calc(1.35em*var(--sp));margin-bottom:calc(.55em*var(--sp))}
+.t-elegan .t2{font-weight:600}
+.t-elegan .t{font-weight:600}
+.t-elegan .o{font-style:italic}
+.t-elegan .pa{text-align:center}
+
+/* ========== Insinyur ========== */
+.t-insinyur .nm{font-weight:600;font-size:2.3em;letter-spacing:-.012em}
+.t-insinyur .jb{font-family:var(--fm),monospace;font-size:.98em;color:var(--ac);margin-top:.3em}
+.t-insinyur .ctg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:1em;row-gap:.34em;margin-top:.8em;padding:.5em 0;border-top:1.5px solid #1a1a1a;border-bottom:.75px solid #1a1a1a;font-size:.9em}
+.t-insinyur .ck{display:block;font-family:var(--fm),monospace;font-size:.82em;text-transform:uppercase;color:var(--ac)}
+.t-insinyur .cv-v{display:block}
+.t-insinyur .h{font-family:var(--fm),monospace;font-weight:500;font-size:.88em;text-transform:uppercase;letter-spacing:.05em;display:flex;gap:.8em;border-bottom:.75px solid #1a1a1a;padding-bottom:.2em}
+.t-insinyur .no{color:var(--ac)}
+.t-insinyur .t{font-weight:600}
+.t-insinyur .d{font-family:var(--fm),monospace;font-size:.84em}
+.t-insinyur .cv-side .d{font-family:var(--fm),monospace}
+.t-insinyur .cv-main{padding-right:1.6em}
+.t-insinyur .cv-side{padding-left:.4em}
+.t-insinyur.has-top .cv-side,.t-insinyur.has-top .cv-main{padding-top:calc(1em*var(--sp))}
+
+/* ========== Minimal ========== */
+.t-minimal .nm{font-weight:600;font-size:2.4em;letter-spacing:-.022em}
+.t-minimal .jb{color:var(--ac)}
+.t-minimal .ph{width:6.8em;height:6.8em}
+.t-minimal .ct{color:var(--ac);margin-top:.7em}
+.t-minimal .h{font-weight:600;font-size:1em;color:var(--ac);margin-top:calc(1.7em*var(--sp));margin-bottom:calc(.55em*var(--sp))}
+.t-minimal .d{color:#6a7079}
+.t-minimal .t{font-weight:600}
+.t-minimal.has-top .cv-col{padding-top:calc(.7em*var(--sp))}
+.t-minimal .eh{margin-top:calc(1em*var(--sp))}
+.t-minimal .h+.eh{margin-top:0}
+
+/* ========== Dua Kolom ========== */
+.t-dua-kolom .nm{font-weight:600;font-size:2.65em;color:var(--ac);letter-spacing:-.01em}
+.t-dua-kolom .jb{font-style:italic}
+.t-dua-kolom .ct{border-top:1.5px solid var(--ac);padding-top:.45em;margin-top:.65em}
+.t-dua-kolom .cv-main{padding-right:1.5em}
+.t-dua-kolom .cv-side{padding-left:.4em}
+.t-dua-kolom .h{color:var(--ac);font-weight:600;font-size:1.14em;border-bottom:.75px solid var(--t3);padding-bottom:.1em}
+.t-dua-kolom .t{font-weight:600}
+.t-dua-kolom .d{color:#555;font-size:.92em}

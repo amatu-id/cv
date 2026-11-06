@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<script src="/amatu.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Amatu CV · Pembuat Curriculum Vitae dan CV ATS</title>
+<meta name="description" content="Isi data sekali, CV tersusun otomatis. Pilih CV ATS atau template visual, unduh sebagai PDF, Word, atau teks.">
+<meta name="theme-color" content="#f3f3f1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f3a5f'/%3E%3Cpath d='M9 6h14v20H9z' fill='%23fff'/%3E%3Cpath d='M12 10.500h8M12 14h8M12 17.500h8M12 21h5' stroke='%231f3a5f' stroke-width='1.500'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/fonts.css?v=1">
+<link rel="stylesheet" href="css/cv.css?v=1">
+<link rel="stylesheet" href="css/app.css?v=1">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">Amatu CV</div>
+    <button class="btn doc-btn" id="docBtn" aria-haspopup="true"><span id="docName">CV Baru</span><svg viewBox="0 0 12 12"><path d="M3 4.500l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.500"/></svg></button>
+    <span class="saved" id="saved"></span>
+    <span class="sp"></span>
+    <button class="btn tpl-btn" id="tplBtn"></button>
+    <div class="split">
+      <button class="btn pri" id="dlPdf">Unduh PDF</button>
+      <button class="btn pri more" id="dlMore" aria-label="Format lain" aria-haspopup="true"><svg viewBox="0 0 12 12"><path d="M3 4.500l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.500"/></svg></button>
+    </div>
+  </header>
+  <div class="work" id="work">
+    <nav class="nav" id="nav"></nav>
+    <section class="form" id="form"></section>
+    <section class="prev" id="prev">
+      <div class="pv-bar">
+        <span class="pv-info" id="pvInfo"></span>
+        <span class="sp"></span>
+        <button class="ib" id="zOut" aria-label="Perkecil">−</button>
+        <button class="ib wide" id="zFit">Pas</button>
+        <button class="ib" id="zIn" aria-label="Perbesar">+</button>
+      </div>
+      <div class="pv-scroll" id="pvs"><div class="pv-pages" id="pages"></div></div>
+    </section>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-v="form" class="on">Isi Data</button>
+    <button data-v="prev">Pratinjau</button>
+  </nav>
+</div>
+<div class="stage" id="stage" aria-hidden="true"></div>
+<div class="menu" id="menu" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<input type="file" id="fileImport" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+<input type="file" id="fileJson" accept=".json,application/json" hidden>
+<input type="file" id="filePhoto" accept="image/*" hidden>
+<dialog class="dlg" id="photoDlg">
+  <h3>Atur foto</h3>
+  <p class="hint">Geser foto agar wajah berada di tengah kotak.</p>
+  <canvas id="photoCv" width="560" height="560"></canvas>
+  <label class="fl"><span>Perbesar</span><input type="range" id="photoZoom" min="1" max="3" step="0.01" value="1"></label>
+  <div class="dlg-act"><button class="btn" id="photoCancel">Batal</button><button class="btn pri" id="photoOk">Pakai foto</button></div>
+</dialog>
+<script src="js/model.js?v=1"></script>
+<script src="js/templates.js?v=1"></script>
+<script src="js/render.js?v=1"></script>
+<script src="js/export-pdf.js?v=1"></script>
+<script src="js/export-docx.js?v=1"></script>
+<script src="js/check.js?v=1"></script>
+<script src="js/import.js?v=1"></script>
+<script src="js/app.js?v=1"></script>
+</body>
+</html>
