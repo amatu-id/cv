@@ -436,8 +436,107 @@ function cekPanel() {
     h('button', {class:'btn sm', onclick() { navigator.clipboard.writeText(plain).then(() => toast('Teks disalin.')); }}, 'Salin teks')];
 }
 
+/* ---------- saved CVs ---------- */
+const DEFAULT_NAME = 'CV Baru';
+const BLN_S = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+function whenText(ts) {
+  if (!ts) return '';
+  const t = new Date(ts), p2 = n => String(n).padStart(2, '0');
+  return t.getDate() + ' ' + BLN_S[t.getMonth()] + ' ' + t.getFullYear() + ', ' + p2(t.getHours()) + '.' + p2(t.getMinutes());
+}
+function savedPanel() {
+  saveNow();
+  const rows = index.list.slice().sort((a, b) => (b.upd || 0) - (a.upd || 0));
+  const cards = rows.map(x => {
+    const d = x.id === doc.id ? doc : jget(DOC(x.id), {}), p = d.p || {}, cur = x.id === doc.id;
+    const who = [CV.fullName(p), p.jabatan].filter(Boolean).join(' · ');
+    return h('div', {class:'sv' + (cur ? ' cur' : ''), 'data-id':x.id},
+      h('div', {class:'sv-n'}, h('b', null, x.name), cur ? h('span', {class:'sv-tag'}, 'Sedang dibuka') : null),
+      h('span', {class:'sv-d'}, who || 'Belum diisi'),
+      h('span', {class:'sv-d q'}, 'Template ' + CV.tpl(d.tpl).name + ' · Diubah ' + whenText(x.upd)),
+      h('div', {class:'sv-a'},
+        h('button', {class:'btn sm pri', onclick() { editDoc(x.id); }}, 'Edit'),
+        h('button', {class:'btn sm', onclick() { renameDoc(x.id); }}, 'Ganti nama'),
+        h('button', {class:'btn sm danger', onclick() { removeDoc(x.id); }}, 'Hapus')));
+  });
+  return [h('h2', null, 'CV Tersimpan'),
+    h('p', {class:'lead'}, 'Setiap perubahan tersimpan otomatis dan ikut sinkron ke akun Anda.'),
+    h('div', {class:'sv-top'},
+      h('button', {class:'btn sm', onclick() { addDoc(CV.blank(), DEFAULT_NAME); showPanel('pribadi'); }}, '+ CV baru'),
+      h('button', {class:'btn sm', onclick() { $('fileImport').click(); }}, 'Isi dari CV lama')),
+    cards];
+}
+/* Small dialog in place of prompt()/confirm(). Resolves to the typed text, or null when cancelled. */
+function ask(o) {
+  const dl = $('askDlg'), inp = $('askInput');
+  $('toast').hidden = true;
+  $('askTitle').textContent = o.title; $('askText').textContent = o.text || ''; $('askText').hidden = !o.text;
+  $('askOk').textContent = o.ok || 'OK';
+  inp.hidden = o.value == null; inp.value = o.value == null ? '' : o.value;
+  return new Promise(res => {
+    let val = null;
+    const form = $('askForm');
+    const submit = () => { val = inp.value; };
+    const cancel = () => dl.close();
+    form.addEventListener('submit', submit);
+    $('askCancel').addEventListener('click', cancel);
+    dl.addEventListener('close', () => { form.removeEventListener('submit', submit); $('askCancel').removeEventListener('click', cancel); res(val); }, {once:true});
+    dl.showModal();
+    if (o.value != null) { inp.focus(); inp.select(); }
+  });
+}
+function editDoc(id) { if (id !== doc.id) switchDoc(id); showPanel('pribadi'); setView('form'); }
+async function renameDoc(id) {
+  const row = index.list.find(x => x.id === id); if (!row) return;
+  const n = await ask({title:'Ganti nama CV', value:row.name, ok:'Simpan'});
+  if (n == null || !n.trim()) return;
+  const name = n.trim();
+  if (id === doc.id) { doc.name = name; $('docName').textContent = name; dirty = true; saveNow(); }
+  else { const d = jget(DOC(id), null); if (d) { d.name = name; persist(d); } }
+  if (panel === 'simpanan') showPanel('simpanan');
+}
+async function removeDoc(id) {
+  const row = index.list.find(x => x.id === id); if (!row) return;
+  const yes = await ask({title:'Hapus CV ini?', text:'“' + row.name + '” akan dihapus dari semua perangkat Anda.', ok:'Hapus'});
+  if (yes == null) return;
+  const wasCur = id === doc.id;
+  if (wasCur) { dirty = false; clearTimeout(saveT); } else saveNow();
+  const raw = wasCur ? JSON.stringify(doc) : localStorage.getItem(DOC(id));
+  localStorage.removeItem(DOC(id));
+  index.list = index.list.filter(x => x.id !== id);
+  let blankId = null;
+  if (wasCur) {
+    const next = index.list.slice().sort((a, b) => (b.upd || 0) - (a.upd || 0))[0];
+    if (next) { index.cur = next.id; doc = hydrate(jget(DOC(next.id), CV.blank())); }
+    else { doc = CV.blank(); blankId = doc.id; index.cur = doc.id; persist(doc); }
+  }
+  localStorage.setItem(IDX, JSON.stringify(index));
+  openCard = null;
+  if (wasCur) afterSwitch(); else { navCounts(); if (panel === 'simpanan') showPanel('simpanan'); }
+  toast('“' + row.name + '” dihapus.', 'Urungkan', () => {
+    localStorage.setItem(DOC(id), raw);
+    if (blankId && doc.id === blankId && CV.isEmpty(doc)) { localStorage.removeItem(DOC(blankId)); index.list = index.list.filter(x => x.id !== blankId); }
+    index.list.push(row);
+    localStorage.setItem(IDX, JSON.stringify(index));
+    if (wasCur) switchDoc(id); else { navCounts(); if (panel === 'simpanan') showPanel('simpanan'); }
+  });
+}
+async function saveClick() {
+  if (CV.isEmpty(doc)) return toast('Belum ada data untuk disimpan.');
+  if (doc.name === DEFAULT_NAME) {
+    const p = doc.p, n = await ask({title:'Simpan CV', text:'Nama ini tampil di daftar CV Tersimpan.', value:['CV', p.nama, p.jabatan ? '- ' + p.jabatan : ''].filter(Boolean).join(' '), ok:'Simpan'});
+    if (n == null) return;
+    if (n.trim()) { doc.name = n.trim(); $('docName').textContent = doc.name; }
+  }
+  dirty = true; saveNow(); navCounts();
+  if (panel === 'simpanan') showPanel('simpanan');
+  toast('“' + doc.name + '” tersimpan.', 'Lihat daftar', () => { showPanel('simpanan'); setView('form'); });
+}
+$('saveBtn').addEventListener('click', saveClick);
+
 /* ---------- navigation ---------- */
 const NAV = [
+  ['FILE', [['simpanan','CV Tersimpan']]],
   ['DATA', [['pribadi','Data Pribadi'],['profil','Ringkasan'],['kerja','Pengalaman Kerja'],['didik','Pendidikan'],['skill','Keahlian'],['bahasa','Bahasa'],['sertifikat','Sertifikasi'],['latih','Pelatihan'],['proyek','Proyek'],['org','Organisasi'],['award','Penghargaan'],['publik','Publikasi'],['rujuk','Referensi'],['ekstra','Bagian Tambahan'],['lain','Informasi Tambahan']]],
   ['TAMPILAN', [['template','Template'],['atur','Pengaturan'],['susun','Susunan Bagian']]],
   ['PERIKSA', [['cek','Cek ATS']]]
@@ -448,13 +547,13 @@ function renderNav() {
   navCounts();
 }
 function navCounts() {
-  document.querySelectorAll('[data-ct]').forEach(e => { const a = doc[e.dataset.ct]; e.textContent = Array.isArray(a) && a.length ? a.length : ''; });
+  document.querySelectorAll('[data-ct]').forEach(e => { const a = e.dataset.ct === 'simpanan' ? index.list : doc[e.dataset.ct]; e.textContent = Array.isArray(a) && a.length ? a.length : ''; });
 }
 function showPanel(k) {
   panel = k; thumbJob++;
   document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('on', b.dataset.k === k));
   const f = $('form'); f.innerHTML = '';
-  const kids = k === 'pribadi' ? pribadiPanel() : k === 'profil' ? profilPanel() : k === 'lain' ? lainPanel() : k === 'template' ? templatePanel() : k === 'atur' ? aturPanel() : k === 'susun' ? susunPanel() : k === 'cek' ? cekPanel() : listPanel(k);
+  const kids = k === 'simpanan' ? savedPanel() : k === 'pribadi' ? pribadiPanel() : k === 'profil' ? profilPanel() : k === 'lain' ? lainPanel() : k === 'template' ? templatePanel() : k === 'atur' ? aturPanel() : k === 'susun' ? susunPanel() : k === 'cek' ? cekPanel() : listPanel(k);
   f.append(...kids.flat().filter(Boolean));
   f.scrollTop = 0;
   const b = document.querySelector(`#nav button[data-k="${k}"]`);
@@ -529,24 +628,17 @@ function paintTplBtn() { $('tplBtn').textContent = 'Template: ' + CV.tpl(doc.tpl
 function docMenu() {
   const items = [{head:'CV tersimpan'}];
   index.list.slice().sort((a, b) => b.upd - a.upd).forEach(x => items.push({label:x.name, cur:x.id === doc.id, fn() { if (x.id !== doc.id) switchDoc(x.id); }}));
-  items.push('-',
-    {label:'CV baru', fn() { addDoc(CV.blank(), 'CV Baru'); showPanel('pribadi'); }},
+  items.push({label:'Kelola semua CV', sub:'Edit, ganti nama, atau hapus', fn() { showPanel('simpanan'); setView('form'); }}, '-',
+    {label:'CV baru', fn() { addDoc(CV.blank(), DEFAULT_NAME); showPanel('pribadi'); }},
     {label:'Isi dari CV lama', sub:'Baca PDF atau DOCX ke formulir', fn() { $('fileImport').click(); }},
     {label:'Salin untuk lowongan lain', fn() { addDoc(JSON.parse(JSON.stringify(doc)), doc.name + ' (salinan)'); toast('Salinan dibuat.'); }},
-    {label:'Ganti nama', fn() { const n = prompt('Nama CV', doc.name); if (n && n.trim()) { doc.name = n.trim(); $('docName').textContent = doc.name; dirty = true; saveNow(); } }},
+    {label:'Ganti nama', fn() { renameDoc(doc.id); }},
     {label:'Isi dengan data contoh', fn() { const s = CV.sample(); s.tpl = doc.tpl; addDoc(s, 'Contoh CV'); }},
     '-',
     {label:'Unduh cadangan data', sub:'Berkas JSON', fn:dlJson},
     {label:'Pulihkan dari cadangan', fn() { $('fileJson').click(); }},
     '-',
-    {label:'Hapus CV ini', del:true, fn() {
-      if (!confirm('Hapus "' + doc.name + '"?')) return;
-      dirty = false; clearTimeout(saveT);
-      localStorage.removeItem(DOC(doc.id)); index.list = index.list.filter(x => x.id !== doc.id);
-      if (index.list.length) { index.cur = index.list[0].id; localStorage.setItem(IDX, JSON.stringify(index)); doc = hydrate(jget(DOC(index.cur), CV.blank())); }
-      else { doc = CV.blank(); index.cur = doc.id; persist(doc); }
-      afterSwitch();
-    }});
+    {label:'Hapus CV ini', del:true, fn() { removeDoc(doc.id); }});
   openMenu($('docBtn'), items);
 }
 $('docBtn').addEventListener('click', () => $('menu').hidden ? docMenu() : closeMenu());

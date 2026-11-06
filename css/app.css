@@ -115,6 +115,21 @@ button{cursor:pointer}
 .ord.off input[type=text]{color:var(--tx3);text-decoration:line-through}
 .ord .mv{display:flex}
 
+/* saved CVs */
+.sv-top{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.sv{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 12px;margin-bottom:8px}
+.sv.cur{border-color:var(--hi)}
+.sv-n{display:flex;align-items:baseline;gap:8px;min-width:0}
+.sv-n b{font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.sv-tag{flex:none;font-size:11px;color:var(--hi);font-weight:500}
+.sv-d{display:block;font-size:12px;color:var(--tx2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sv-d.q{color:var(--tx3)}
+.sv-a{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.btn.danger{border-color:var(--line2)}
+.sv-empty{color:var(--tx3);padding:18px 0;text-align:center}
+.ask-in{margin:10px 0 2px}
+.ask-in:focus{outline:2px solid var(--hi);outline-offset:-1px;border-color:transparent}
+
 /* check */
 .ck-sum{display:flex;gap:8px;align-items:baseline;margin-bottom:8px}
 .ck-sum b{font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
@@ -174,7 +189,8 @@ button{cursor:pointer}
   .app{grid-template-rows:48px minmax(0,1fr) calc(46px + env(safe-area-inset-bottom))}
   .top{padding:0 10px;gap:6px}
   .brand{display:none}
-  .doc-btn{max-width:42vw}
+  .doc-btn{max-width:30vw}
+  .top .btn{padding:0 9px}
   .work{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
   .work[data-v=form] .prev,.work[data-v=prev] .form,.work[data-v=prev] .nav{display:none}
   .work[data-v=prev]{grid-template-rows:minmax(0,1fr)}
