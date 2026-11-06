@@ -48,11 +48,12 @@ function persist(d) {
     return true;
   } catch (e) { toast('Penyimpanan peramban penuh. Hapus CV yang tidak terpakai atau ganti foto.'); return false; }
 }
-let saveT = 0, dirty = false;
+let saveT = 0, syncT = 0, dirty = false;
 function saveNow() { if (!dirty) return; dirty = false; clearTimeout(saveT); if (persist(doc)) showSaved(); }
 function showSaved() {
   const t = new Date(), a = window.AMATU && AMATU.pending && AMATU.pending();
   $('saved').textContent = (a ? 'Menyinkronkan' : 'Tersimpan') + ' ' + String(t.getHours()).padStart(2, '0') + '.' + String(t.getMinutes()).padStart(2, '0');
+  clearTimeout(syncT); if (a) syncT = setTimeout(showSaved, 1500);
 }
 function touch() { dirty = true; clearTimeout(saveT); saveT = setTimeout(saveNow, 800); schedule(); navCounts(); }
 addEventListener('pagehide', saveNow);
